@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michael Chan - Professional Bio</title>
+    <style>
+        /* Tab Styles */
+        .tab-container {
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            background-color: #f0f8fb;
+            border: none;
+            color: #2d3748;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            margin-right: 4px;
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            background-color: #4299e1;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border-radius: 0 8px 8px 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        th {
+            color: #2d3748;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            background-color: #fafafa;
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        /* Unique pastel colors for each left column */
+        .left-menu-1 { background-color: #fdf2f8; /* Soft pastel pink */ }
+        .left-menu-2 { background-color: #f0fdf4; /* Soft pastel green */ }
+        .left-menu-3 { background-color: #f0f9ff; /* Soft pastel sky blue */ }
+        .left-menu-4 { background-color: #fef6ff; /* Soft pastel purple */ }
+        .left-menu-5 { background-color: #fffbeb; /* Soft pastel yellow */ }
+        .left-menu-6 { background-color: #eff6ff; /* Soft pastel blue */ }
+        .left-menu {
+            font-weight: 500;
+            width: 25%;
+        }
+
+        /* Link Styles */
+        a {
+            color: #4299e1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #3182ce;
+            text-decoration: underline;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .tab-btn {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+            th, td {
+                padding: 10px;
+            }
+            .left-menu {
+                width: 30%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="tab-container">
+        <button class="tab-btn active" onclick="switchTab('english')">English</button>
+        <button class="tab-btn" onclick="switchTab('chinese')">中文(繁體)</button>
+    </div>
+
+    <!-- English Tab Content -->
+    <div id="english" class="tab-content active">
+        <!-- Table 1: Personal Information (Pink Left Column) -->
+        <table>
+            <tr>
+                <th class="left-menu left-menu-1">Personal Information</th>
+                <td>
+                    <strong>Name:</strong> Chan Kwai Nam Michael<br>
+                    <strong>Contact:</strong> +852 9360 6681 | <a href="mailto:michael@icetechhk.com">michael@icetechhk.com</a><br>
+                    <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/chan-michael-69499036" target="_blank">linkedin.com/in/chan-michael-69499036</a><br>
+                    <strong>Website:</strong> <a href="https://www.intabms.org" target="_blank">www.intabms.org</a>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Table 2: Education Background (Green Left Column) -->
+        <table>
+            <tr>
+                <th class="left-menu left-menu-2">Education Background</th>
+                <td>
+                    Master's degree in Engineering Management, University of Technology Sydney (2008)
+                </td>
+            </tr>
+        </table>
+
+        <!-- Table 3: Professional Experience (Sky Blue Left Column) -->
+        <table>
+            <tr>
+                <th class="left-menu left-menu-3">Professional Experience</th>
+                <td>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li>Over 37 years of experience in the consumer electronic product industry</li>
+                        <li>Developed hundreds of products with suppliers in mainland China and SE Asia for the US consumer electronic market</li>
+                        <li>Exclusive distributor of Top Boss International Co. Ltd. (AI-driven Business Management Simulation provider in Asia)</li>
+                        <li>Founder of Icetech Hong Kong Company Limited and Icetech Education</li>
+                        <li>Founding President of International Association of Business Management Simulation (IABMS) - NGO under section 88 (since Jun 2023)</li>
+                        <li>Organized notable local and International Business Management Simulation Competition and case competition in HK since 2019 (thousands of student participants)</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Table 4: Vision & Mission (Purple Left Column) -->
+        <table>
+            <tr>
+                <th class="left-menu left-menu-4">Vision & Mission</th>
+                <td>
+                    Dedicated to weaving diversity, equality, and inclusion into the core of business education by:
+                    <ul style="margin: 5px 0 0 20px; padding-left: 0;">
+                        <li>Grounding learning in tangible real-world challenges</li>
+                        <li>Providing an AI-driven simulation platform with dynamic, risk-free virtual business environment</li>
+                        <li>Helping users experiment with strategies to understand decision impacts on business performance and cross-team collaboration</li>
+                        <li>Bridging the gap between classroom theory and on-the-job practice</li>
+                        <li>Sharpening key professional competencies: strategic foresight, flexibility, and ethical decision-making</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Table 5: University Collaborations (Yellow Left Column) -->
+        <table>
+            <tr>
+                <th class="left-menu left-menu-5">University Collaborations (2019-Present)</th>
+                <td>
+                    HKUST, CUHK, HKBU, CityU, PolyU, EDUHK, HKMU, IVE Kwun Tong
+                </td>
+            </tr>
+        </table>
+
+        <!-- Table 6: Teaching Commitment (Blue Left Column) -->
+        <table>
+            <tr>
+                <th class="left-menu left-menu-6">Teaching Commitment</th>
+                <td>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li>Teaching Associate at Hong Kong University of Science and Technology</li>
+                        <li>Part-time Lecturer at Hong Kong Polytechnic University (PolyU) - HKCC</li>
+                        <li>Part-time Lecturer at The Hong Kong Institute of Education (THEi)</li>
+                        <li>Facilitator in CityU - Global Supply Chain Management</li>
+                        <li>Facilitator in HKBU - MBA of Strategic Management</li>
+                        <li>Facilitator in EDUHK - Micro Credential Model of Business Management</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Chinese Tab Content -->
+    <div id="chinese" class="tab-content">
+        <!-- Table 1: 個人資料 (Pink Left Column) -->
+        <table>
+            <tr>
+                <th class="left-menu left-menu-1">個人資料</th>
+                <td>
+                    <strong>姓名:</strong> 陳桂楠 (Michael Chan)<br>
+                    <strong>聯絡方式:</strong> +852 9360 6681 | <a href="mailto:michael@icetechhk.com">michael@icetechhk.com</a><br>
+                    <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/chan-michael-69499036" target="_blank">linkedin.com/in/chan-michael-69499036</a><br>
+                    <strong>網站:</strong> <a href="https://www.intabms.org" target="_blank">www.intabms.org</a>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Table 2: 教育背景 (Green Left Column) -->
+        <table>
+            <tr>
+                <th class="left-menu left-menu-2">教育背景</th>
+                <td>
+                    2008年畢業於雪梨科技大學,取得工程管理碩士學位
+                </td>
+            </tr>
+        </table>
+
+        <!-- Table 3: 專業經驗 (Sky Blue Left Column) -->
+        <table>
+            <tr>
+                <th class="left-menu left-menu-3">專業經驗</th>
+                <td>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li>消費性電子產品產業擁有超過37年經驗</li>
+                        <li>與中國大陸和東南亞國家供應商合作開發數百種產品,銷往美國消費性電子市場</li>
+                        <li>特波國際股份有限公司獨家經銷商(亞洲專業AI驅動型商業管理模擬供應商)</li>
+                        <li>創科發展香港有限公司及科創教育創始人</li>
+                        <li>國際模擬商業管理學會(IABMS)創始主席 - 依據《公司法》第88條註冊之非政府組織(2023年6月起)</li>
+                        <li>自2019年起在香港舉辦多項知名本地及國際商業管理模擬競賽和案例競賽,吸引數千名學生參與</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Table 4: 願景與使命 (Purple Left Column) -->
+        <table>
+            <tr>
+                <th class="left-menu left-menu-4">願景與使命</th>
+                <td>
+                    致力於將多元化、平等和包容融入商業教育核心:
+                    <ul style="margin: 5px 0 0 20px; padding-left: 0;">
+                        <li>將學習與現實世界的實際挑戰相結合</li>
+                        <li>開發AI驅動的模擬平台,提供動態且無風險的虛擬商業環境</li>
+                        <li>協助使用者嘗試各種策略,了解決策對業務績效及跨團隊協作的影響</li>
+                        <li>彌合課堂理論與實際工作之間的差距</li>
+                        <li>提升關鍵專業能力:戰略遠見、靈活性及道德決策</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Table 5: 大學合作經驗 (Yellow Left Column) -->
+        <table>
+            <tr>
+                <th class="left-menu left-menu-5">大學合作經驗 (2019年至今)</th>
+                <td>
+                    香港科技大學、香港中文大學、香港浸信會大學、香港城市大學、香港理工大學、香港教育大學、香港都會大學、觀塘國際教育學院
+                </td>
+            </tr>
+        </table>
+
+        <!-- Table 6: 教學經驗 (Blue Left Column) -->
+        <table>
+            <tr>
+                <th class="left-menu left-menu-6">教學經驗</th>
+                <td>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        <li>香港科技大學教學助教</li>
+                        <li>香港理工大學香港專上學院兼任講師</li>
+                        <li>香港教育學院(THEi)課程導師</li>
+                        <li>香港城市大學全球供應鏈管理課程輔導員</li>
+                        <li>香港浸信會大學策略管理MBA課程導師</li>
+                        <li>香港教育學院商業管理微證書課程導師</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+
+            // Deactivate all tab buttons
+            const tabBtns = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove("active");
+            }
+
+            // Activate selected tab
+            document.getElementById(tabName).classList.add("active");
+            event.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
