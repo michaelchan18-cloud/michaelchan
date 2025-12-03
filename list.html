@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top-Boss 客戶名單</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* 全局样式 */
+        body {
+            background-color: #f8fafc;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            max-width: 1800px; /* 加宽容器以适应英文名称 */
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin: 0 auto;
+        }
+
+        /* 标题样式 */
+        .page-title {
+            color: #1e293b;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* 标签样式 */
+        .nav-tabs {
+            border-bottom: 2px solid #3b82f6;
+            margin-bottom: 25px;
+            justify-content: center;
+            gap: 4px;
+        }
+        .nav-tabs .nav-link {
+            color: #334155;
+            background-color: #f1f5f9;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            padding: 12px 30px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .nav-tabs .nav-link.active {
+            color: white;
+            background-color: #3b82f6;
+            border-bottom: 2px solid #1d4ed8;
+        }
+        .nav-tabs .nav-link:hover:not(.active) {
+            background-color: #e2e8f0;
+            color: #1e40af;
+        }
+
+        /* 表格容器 */
+        .table-container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+        }
+        .region-section {
+            flex: 1;
+            min-width: 350px; /* 加宽列宽以适应英文名称 */
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        /* 区域标题样式 */
+        .region-title {
+            padding: 14px 18px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .hk-title {
+            background: linear-gradient(90deg, #0f172a, #1e293b);
+        }
+        .mainland-title {
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+        }
+        .taiwan-title {
+            background: linear-gradient(90deg, #059669, #10b981);
+        }
+
+        /* 表格样式 */
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .client-table th, .client-table td {
+            padding: 11px 16px;
+            text-align: left;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .client-table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #334155;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            font-size: 0.95rem;
+        }
+        .client-table .number-col {
+            width: 45px;
+            text-align: center;
+            color: #64748b;
+            font-weight: 500;
+        }
+        .client-table tr:hover {
+            background-color: #f1f5f9;
+            transition: background-color 0.2s ease;
+        }
+        .client-table td {
+            color: #1e293b;
+            font-size: 0.92rem;
+            line-height: 1.4; /* 优化行高以适应中英文换行 */
+        }
+        .client-table td .english-name {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        /* 滚动区域 */
+        .table-scroll {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .table-scroll::-webkit-scrollbar {
+            width: 7px;
+        }
+        .table-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .table-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* 企业培训区域颜色调整 */
+        .corporate .mainland-title {
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+        }
+        .corporate .taiwan-title {
+            background: linear-gradient(90deg, #ea580c, #f97316);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">Top-Boss 客戶名單 (Top-Boss Client List)</h1>
+        
+        <!-- 标签导航 -->
+        <ul class="nav nav-tabs" id="clientTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="academic-tab" data-bs-toggle="tab" 
+                        data-bs-target="#academic" type="button" role="tab" 
+                        aria-controls="academic" aria-selected="true">
+                    學術教育 (Academic Education)
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="corporate-tab" data-bs-toggle="tab" 
+                        data-bs-target="#corporate" type="button" role="tab" 
+                        aria-controls="corporate" aria-selected="false">
+                    企業培訓 (Corporate Training)
+                </button>
+            </li>
+        </ul>
+        
+        <!-- 标签内容 -->
+        <div class="tab-content" id="clientTabsContent">
+            <!-- 學術教育标签 -->
+            <div class="tab-pane fade show active" id="academic" role="tabpanel" aria-labelledby="academic-tab">
+                <div class="table-container">
+                    <!-- 香港高校及機構 -->
+                    <div class="region-section">
+                        <div class="region-title hk-title">香港高校及機構 (Hong Kong Universities & Institutions)</div>
+                        <div class="table-scroll">
+                            <table class="client-table">
+                                <thead>
+                                    <tr>
+                                        <th class="number-col">#</th>
+                                        <th>院校名稱 (Institution Name)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="number-col">1</td><td>香港科技大學 (The Hong Kong University of Science and Technology, HKUST)</td></tr>
+                                    <tr><td class="number-col">2</td><td>香港中文大學 (The Chinese University of Hong Kong, CUHK)</td></tr>
+                                    <tr><td class="number-col">3</td><td>香港浸會大學 (Hong Kong Baptist University, HKBU)</td></tr>
+                                    <tr><td class="number-col">4</td><td>香港城市大學 (City University of Hong Kong, CityU)</td></tr>
+                                    <tr><td class="number-col">5</td><td>香港教育大學 (The Education University of Hong Kong, EdUHK)</td></tr>
+                                    <tr><td class="number-col">6</td><td>香港理工大學香港專上學院 (Hong Kong Polytechnic University Community College, HKCC)</td></tr>
+                                    <tr><td class="number-col">7</td><td>香港高等教育科技學院 (The Hong Kong Institute of Vocational Education, IVE)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 大陸高校 -->
+                    <div class="region-section">
+                        <div class="region-title mainland-title">中國大陸高校 (Mainland China Universities)</div>
+                        <div class="table-scroll">
+                            <table class="client-table">
+                                <thead>
+                                    <tr>
+                                        <th class="number-col">#</th>
+                                        <th>院校名稱 (University Name)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="number-col">1</td><td>上海海事大學 (Shanghai Maritime University)</td></tr>
+                                    <tr><td class="number-col">2</td><td>上海商學院 (Shanghai Business School)</td></tr>
+                                    <tr><td class="number-col">3</td><td>山東大學 (Shandong University)</td></tr>
+                                    <tr><td class="number-col">4</td><td>中南財經政法大學 (Zhongnan University of Economics and Law)</td></tr>
+                                    <tr><td class="number-col">5</td><td>中原工學院 (Zhongyuan University of Technology)</td></tr>
+                                    <tr><td class="number-col">6</td><td>中國人民大學 (Renmin University of China, RUC)</td></tr>
+                                    <tr><td class="number-col">7</td><td>中國傳媒大學 (Communication University of China, CUC)</td></tr>
+                                    <tr><td class="number-col">8</td><td>天津商業大學 (Tianjin University of Commerce)</td></tr>
+                                    <tr><td class="number-col">9</td><td>北京石油化工學院 (Beijing Institute of Petrochemical Technology)</td></tr>
+                                    <tr><td class="number-col">10</td><td>北京物資學院 (Beijing Wuzi University)</td></tr>
+                                    <tr><td class="number-col">11</td><td>北京資訊科技大學 (Beijing Information Science and Technology University)</td></tr>
+                                    <tr><td class="number-col">12</td><td>北京聯合大學 (Beijing Union University)</td></tr>
+                                    <tr><td class="number-col">13</td><td>四川大學 (Sichuan University)</td></tr>
+                                    <tr><td class="number-col">14</td><td>吉林大學 (Jilin University)</td></tr>
+                                    <tr><td class="number-col">15</td><td>安徽大學 (Anhui University)</td></tr>
+                                    <tr><td class="number-col">16</td><td>成都理工大學 (Chengdu University of Technology)</td></tr>
+                                    <tr><td class="number-col">17</td><td>江南大學 (Jiangnan University)</td></tr>
+                                    <tr><td class="number-col">18</td><td>江蘇大學 (Jiangsu University)</td></tr>
+                                    <tr><td class="number-col">19</td><td>江蘇科技大學 (Jiangsu University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">20</td><td>江蘇淮陰工學院 (Huaiyin Institute of Technology)</td></tr>
+                                    <tr><td class="number-col">21</td><td>江蘇懷安資訊職業技術學院 (Huai'an Vocational College of Information Technology)</td></tr>
+                                    <tr><td class="number-col">22</td><td>池州學院 (Chizhou University)</td></tr>
+                                    <tr><td class="number-col">23</td><td>西安電力高等專科學校 (Xi'an Electric Power College)</td></tr>
+                                    <tr><td class="number-col">24</td><td>西南科技大學 (Southwest University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">25</td><td>西南財經大學 (Southwestern University of Finance and Economics, SWUFE)</td></tr>
+                                    <tr><td class="number-col">26</td><td>杭州師範大學 (Hangzhou Normal University)</td></tr>
+                                    <tr><td class="number-col">27</td><td>杭州電子科技大學 (Hangzhou Dianzi University)</td></tr>
+                                    <tr><td class="number-col">28</td><td>武漢大學 (Wuhan University)</td></tr>
+                                    <tr><td class="number-col">29</td><td>河北大學 (Hebei University)</td></tr>
+                                    <tr><td class="number-col">30</td><td>河南南陽理工學院 (Nanyang Institute of Technology)</td></tr>
+                                    <tr><td class="number-col">31</td><td>河南師範大學 (Henan Normal University)</td></tr>
+                                    <tr><td class="number-col">32</td><td>河南財經政法大學 (Henan University of Economics and Law)</td></tr>
+                                    <tr><td class="number-col">33</td><td>河南職業技術學院 (Henan Vocational and Technical College)</td></tr>
+                                    <tr><td class="number-col">34</td><td>河海大學 (Hohai University)</td></tr>
+                                    <tr><td class="number-col">35</td><td>南京大學 (Nanjing University)</td></tr>
+                                    <tr><td class="number-col">36</td><td>南京工程學院 (Nanjing Institute of Technology)</td></tr>
+                                    <tr><td class="number-col">37</td><td>南京工業大學 (Nanjing Tech University)</td></tr>
+                                    <tr><td class="number-col">38</td><td>南京中醫藥大學 (Nanjing University of Chinese Medicine)</td></tr>
+                                    <tr><td class="number-col">39</td><td>南京林業大學 (Nanjing Forestry University)</td></tr>
+                                    <tr><td class="number-col">40</td><td>南京航空航太大學 (Nanjing University of Aeronautics and Astronautics, NUAA)</td></tr>
+                                    <tr><td class="number-col">41</td><td>南京理工大學 (Nanjing University of Science and Technology, NJUST)</td></tr>
+                                    <tr><td class="number-col">42</td><td>南京資訊工程大學 (Nanjing University of Information Science and Technology, NUIST)</td></tr>
+                                    <tr><td class="number-col">43</td><td>哈爾濱工程大學 (Harbin Engineering University)</td></tr>
+                                    <tr><td class="number-col">44</td><td>哈爾濱商業大學 (Harbin University of Commerce)</td></tr>
+                                    <tr><td class="number-col">45</td><td>重慶工商大學 (Chongqing Technology and Business University)</td></tr>
+                                    <tr><td class="number-col">46</td><td>首都經濟貿易大學 (Capital University of Economics and Business, CUEB)</td></tr>
+                                    <tr><td class="number-col">47</td><td>徐州師範大學 (Xuzhou Normal University, now Jiangsu Normal University)</td></tr>
+                                    <tr><td class="number-col">48</td><td>浙江大學 (Zhejiang University, ZJU)</td></tr>
+                                    <tr><td class="number-col">49</td><td>浙江工商大學 (Zhejiang Gongshang University)</td></tr>
+                                    <tr><td class="number-col">50</td><td>浙江工業大學 (Zhejiang University of Technology)</td></tr>
+                                    <tr><td class="number-col">51</td><td>浙江經貿職業技術學院 (Zhejiang Institute of Economics and Trade)</td></tr>
+                                    <tr><td class="number-col">52</td><td>高博教育(蘇州)有限公司 (Gaobo Education (Suzhou) Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">53</td><td>常州大學 (Changzhou University)</td></tr>
+                                    <tr><td class="number-col">54</td><td>常州劉國鈞職教中心 (Changzhou Liuguojun Vocational Education Center)</td></tr>
+                                    <tr><td class="number-col">55</td><td>淮陰師範學院 (Huaiyin Normal University)</td></tr>
+                                    <tr><td class="number-col">56</td><td>紹興文理學院 (Shaoxing University)</td></tr>
+                                    <tr><td class="number-col">57</td><td>揚州大學 (Yangzhou University)</td></tr>
+                                    <tr><td class="number-col">58</td><td>湖州師範學院 (Huzhou University)</td></tr>
+                                    <tr><td class="number-col">59</td><td>湖南大學 (Hunan University)</td></tr>
+                                    <tr><td class="number-col">60</td><td>貴州財經學院 (Guizhou University of Finance and Economics)</td></tr>
+                                    <tr><td class="number-col">61</td><td>新疆大學 (Xinjiang University)</td></tr>
+                                    <tr><td class="number-col">62</td><td>新疆財經大學 (Xinjiang University of Finance and Economics)</td></tr>
+                                    <tr><td class="number-col">63</td><td>溫州大學 (Wenzhou University)</td></tr>
+                                    <tr><td class="number-col">64</td><td>電子科技大學中山學院 (University of Electronic Science and Technology of China, Zhongshan Institute)</td></tr>
+                                    <tr><td class="number-col">65</td><td>寧波大學 (Ningbo University)</td></tr>
+                                    <tr><td class="number-col">66</td><td>齊齊哈爾大學 (Qiqihar University)</td></tr>
+                                    <tr><td class="number-col">67</td><td>廣東技術師範學院 (Guangdong Polytechnic Normal University)</td></tr>
+                                    <tr><td class="number-col">68</td><td>鄭州航空工業管理學院 (Zhengzhou University of Aeronautics)</td></tr>
+                                    <tr><td class="number-col">69</td><td>鄭州輕工業學院 (Zhengzhou University of Light Industry)</td></tr>
+                                    <tr><td class="number-col">70</td><td>蘇州大學 (Soochow University)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 台灣地區高校 -->
+                    <div class="region-section">
+                        <div class="region-title taiwan-title">台灣地區高校 (Taiwan Region Universities)</div>
+                        <div class="table-scroll">
+                            <table class="client-table">
+                                <thead>
+                                    <tr>
+                                        <th class="number-col">#</th>
+                                        <th>院校名稱 (University Name)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="number-col">1</td><td>大仁科技大學 (Tajen University)</td></tr>
+                                    <tr><td class="number-col">2</td><td>大同技術學院 (Ta-Tung University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">3</td><td>大華技術學院 (Ta Hwa University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">4</td><td>大葉大學 (Da-Yeh University)</td></tr>
+                                    <tr><td class="number-col">5</td><td>大漢技術學院 (Ta Han Institute of Technology)</td></tr>
+                                    <tr><td class="number-col">6</td><td>中州技術學院 (Chung Chou University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">7</td><td>中原大學 (Chung Yuan Christian University)</td></tr>
+                                    <tr><td class="number-col">8</td><td>中國文化大學 (Chinese Culture University)</td></tr>
+                                    <tr><td class="number-col">9</td><td>中國科技大學 (China University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">10</td><td>中華大學 (Chung Hua University)</td></tr>
+                                    <tr><td class="number-col">11</td><td>中臺科技大學 (Central Taiwan University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">12</td><td>元培科技大學 (Yuanpei University of Medical Technology)</td></tr>
+                                    <tr><td class="number-col">13</td><td>元智大學 (Yuan Ze University)</td></tr>
+                                    <tr><td class="number-col">14</td><td>北台灣科學技術學院 (Northern Taiwan University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">15</td><td>正修科技大學 (Cheng Shiu University)</td></tr>
+                                    <tr><td class="number-col">16</td><td>永達技術學院 (Yung Ta Institute of Technology and Commerce)</td></tr>
+                                    <tr><td class="number-col">17</td><td>玄奘大學 (Hsuan Chuang University)</td></tr>
+                                    <tr><td class="number-col">18</td><td>佛光大學 (Fo Guang University)</td></tr>
+                                    <tr><td class="number-col">19</td><td>吳鳳技術學院 (WuFeng University)</td></tr>
+                                    <tr><td class="number-col">20</td><td>育達商業技術學院 (Yu Da University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">21</td><td>亞東技術學院 (Asia Eastern University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">22</td><td>亞洲大學 (Asia University, Taiwan)</td></tr>
+                                    <tr><td class="number-col">23</td><td>和春技術學院 (Hoching College of Technology)</td></tr>
+                                    <tr><td class="number-col">24</td><td>明志技術學院 (Ming Chi University of Technology)</td></tr>
+                                    <tr><td class="number-col">25</td><td>明新科技大學 (Ming Hsin University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">26</td><td>明道大學 (Ming Dao University)</td></tr>
+                                    <tr><td class="number-col">27</td><td>東方技術學院 (Orient Institute of Technology)</td></tr>
+                                    <tr><td class="number-col">28</td><td>東南科技大學 (Tungnan University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">29</td><td>東海大學 (Tunghai University)</td></tr>
+                                    <tr><td class="number-col">30</td><td>長庚大學 (Chang Gung University)</td></tr>
+                                    <tr><td class="number-col">31</td><td>長榮大學 (Chang Jung Christian University)</td></tr>
+                                    <tr><td class="number-col">32</td><td>南台科技大學 (Southern Taiwan University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">33</td><td>南亞技術學院 (Nan Ya Institute of Technology)</td></tr>
+                                    <tr><td class="number-col">34</td><td>南華大學 (Nanhua University)</td></tr>
+                                    <tr><td class="number-col">35</td><td>南開技術學院 (Nankai University of Technology)</td></tr>
+                                    <tr><td class="number-col">36</td><td>南營技術 (Nanying Technology College)</td></tr>
+                                    <tr><td class="number-col">37</td><td>建國技術學院 (Chienkuo Technology University)</td></tr>
+                                    <tr><td class="number-col">38</td><td>美和技術學院 (Meiho University)</td></tr>
+                                    <tr><td class="number-col">39</td><td>致理技術學院 (Chihlee University of Technology)</td></tr>
+                                    <tr><td class="number-col">40</td><td>修平技術學院 (Hsiuping University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">41</td><td>真理大學(麻豆) (Aletheia University, Madou Campus)</td></tr>
+                                    <tr><td class="number-col">42</td><td>高苑技術學院 (Kao Yuan University)</td></tr>
+                                    <tr><td class="number-col">43</td><td>高鳳技術學院 (Kao Feng University of Technology)</td></tr>
+                                    <tr><td class="number-col">44</td><td>國立中山大學 (National Sun Yat-sen University)</td></tr>
+                                    <tr><td class="number-col">45</td><td>國立中央大學 (National Central University)</td></tr>
+                                    <tr><td class="number-col">46</td><td>國立中興大學 (National Chung Hsing University)</td></tr>
+                                    <tr><td class="number-col">47</td><td>國立台北科技大學 (National Taipei University of Technology)</td></tr>
+                                    <tr><td class="number-col">48</td><td>國立台北商業技術學院 (National Taipei College of Business)</td></tr>
+                                    <tr><td class="number-col">49</td><td>國立台灣科技大學 (National Taiwan University of Science and Technology, NTUST)</td></tr>
+                                    <tr><td class="number-col">50</td><td>國立台灣師範大學 (National Taiwan Normal University, NTNU)</td></tr>
+                                    <tr><td class="number-col">51</td><td>國立台灣海洋大學 (National Taiwan Ocean University)</td></tr>
+                                    <tr><td class="number-col">52</td><td>國立成功大學 (National Cheng Kung University, NCKU)</td></tr>
+                                    <tr><td class="number-col">53</td><td>國立交通大學 (National Chiao Tung University, NCTU)</td></tr>
+                                    <tr><td class="number-col">54</td><td>國立虎尾技術學院 (National Formosa University)</td></tr>
+                                    <tr><td class="number-col">55</td><td>國立金門技術學院 (National Quemoy University)</td></tr>
+                                    <tr><td class="number-col">56</td><td>國立屏東商業技術學院 (National Pingtung University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">57</td><td>國立政治大學 (National Chengchi University, NCCU)</td></tr>
+                                    <tr><td class="number-col">58</td><td>國立高雄大學 (National University of Kaohsiung)</td></tr>
+                                    <tr><td class="number-col">59</td><td>國立高雄師範大學 (National Kaohsiung Normal University)</td></tr>
+                                    <tr><td class="number-col">60</td><td>國立高雄海洋科技大學 (National Kaohsiung Marine University)</td></tr>
+                                    <tr><td class="number-col">61</td><td>國立高雄第一科技大學 (National Kaohsiung First University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">62</td><td>國立高雄餐旅學院 (National Kaohsiung University of Hospitality and Tourism)</td></tr>
+                                    <tr><td class="number-col">63</td><td>國立高雄應用科技大學 (National Kaohsiung University of Applied Sciences)</td></tr>
+                                    <tr><td class="number-col">64</td><td>國立東華大學 (National Dong Hwa University)</td></tr>
+                                    <tr><td class="number-col">65</td><td>國立雲林科技大學 (National Yunlin University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">66</td><td>國立勤益科技大學 (National Chin-Yi University of Technology)</td></tr>
+                                    <tr><td class="number-col">67</td><td>國立嘉義大學 (National Chiayi University)</td></tr>
+                                    <tr><td class="number-col">68</td><td>國立暨南國際大學 (National Chi Nan University)</td></tr>
+                                    <tr><td class="number-col">69</td><td>國立澎湖科技大學 (National Penghu University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">70</td><td>國立聯合大學 (National United University)</td></tr>
+                                    <tr><td class="number-col">71</td><td>康寧醫護暨管理學院 (Concordia University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">72</td><td>淡江大學 (Tamkang University)</td></tr>
+                                    <tr><td class="number-col">73</td><td>清雲科技大學 (Ching Yun University)</td></tr>
+                                    <tr><td class="number-col">74</td><td>逢甲大學 (Feng Chia University)</td></tr>
+                                    <tr><td class="number-col">75</td><td>景文科技大學 (Jinwen University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">76</td><td>朝陽科技大學 (Chaoyang University of Technology)</td></tr>
+                                    <tr><td class="number-col">77</td><td>華夏技術學院 (Huaxia University of Technology)</td></tr>
+                                    <tr><td class="number-col">78</td><td>華梵大學 (Hwa Hsia University of Technology)</td></tr>
+                                    <tr><td class="number-col">79</td><td>開南大學 (Kainan University)</td></tr>
+                                    <tr><td class="number-col">80</td><td>新生醫護管理專科學校 (Shinsheng College of Medical Care and Management)</td></tr>
+                                    <tr><td class="number-col">81</td><td>萬能科技大學 (Vanung University)</td></tr>
+                                    <tr><td class="number-col">82</td><td>義守大學 (I-Shou University)</td></tr>
+                                    <tr><td class="number-col">83</td><td>聖約翰科技大學 (St. John's University, Taiwan)</td></tr>
+                                    <tr><td class="number-col">84</td><td>僑光技術學院 (Oakland University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">85</td><td>實踐大學 (Shih Chien University)</td></tr>
+                                    <tr><td class="number-col">86</td><td>輔仁大學 (Fu Jen Catholic University)</td></tr>
+                                    <tr><td class="number-col">87</td><td>遠東技術學院 (Far East University)</td></tr>
+                                    <tr><td class="number-col">88</td><td>銘傳大學 (Ming Chuan University)</td></tr>
+                                    <tr><td class="number-col">89</td><td>德明財經科技大學 (Takming University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">90</td><td>德霖技術學院 (Telin University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">91</td><td>稻江科技暨管理學院 (Toko University)</td></tr>
+                                    <tr><td class="number-col">92</td><td>黎明技術學院 (Li Ming University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">93</td><td>樹德科技大學 (Shu-Te University)</td></tr>
+                                    <tr><td class="number-col">94</td><td>崑山科技大學 (Kun Shan University)</td></tr>
+                                    <tr><td class="number-col">95</td><td>親民技術學院 (Chin Min Institute of Technology)</td></tr>
+                                    <tr><td class="number-col">96</td><td>醒吾技術學院 (Hsing Wu University)</td></tr>
+                                    <tr><td class="number-col">97</td><td>靜宜大學 (Providence University)</td></tr>
+                                    <tr><td class="number-col">98</td><td>龍華科技大學 (Lunghwa University of Science and Technology)</td></tr>
+                                    <tr><td class="number-col">99</td><td>嶺東技術學院 (Ling Tung University)</td></tr>
+                                    <tr><td class="number-col">100</td><td>環球技術學院 (TransWorld University)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 企業培訓标签 -->
+            <div class="tab-pane fade corporate" id="corporate" role="tabpanel" aria-labelledby="corporate-tab">
+                <div class="table-container">
+                    <!-- 中國大陸企業 -->
+                    <div class="region-section">
+                        <div class="region-title mainland-title">中國大陸企業 (Mainland China Enterprises)</div>
+                        <div class="table-scroll">
+                            <table class="client-table">
+                                <thead>
+                                    <tr>
+                                        <th class="number-col">#</th>
+                                        <th>企業名稱 (Enterprise Name)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="number-col">1</td><td>DELL戴爾 (Dell Inc.)</td></tr>
+                                    <tr><td class="number-col">2</td><td>上海永輝超市有限公司 (Yonghui Superstores Co., Ltd. - Shanghai)</td></tr>
+                                    <tr><td class="number-col">3</td><td>上海交通大學國際零售商業總裁班 (Shanghai Jiao Tong University International Retail Business CEO Program)</td></tr>
+                                    <tr><td class="number-col">4</td><td>上海國美電器有限公司 (Gome Electrical Appliances Co., Ltd. - Shanghai)</td></tr>
+                                    <tr><td class="number-col">5</td><td>上海緊缺人才培訓事務服務中心 (Shanghai Scarce Talent Training Service Center)</td></tr>
+                                    <tr><td class="number-col">6</td><td>凡尚服飾（上海）有限公司 (Fashion Now Apparel (Shanghai) Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">7</td><td>大眾汽車集團 (Volkswagen Group China)</td></tr>
+                                    <tr><td class="number-col">8</td><td>大連國美電器有限公司 (Gome Electrical Appliances Co., Ltd. - Dalian)</td></tr>
+                                    <tr><td class="number-col">9</td><td>山東德百集團超市有限公司 (Shandong Debai Group Supermarket Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">10</td><td>山西國美電器有限公司 (Gome Electrical Appliances Co., Ltd. - Shanxi)</td></tr>
+                                    <tr><td class="number-col">11</td><td>山東福德科技有限公司 (Shandong Fude Technology Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">12</td><td>山東福德科技有限公司 (Shandong Fude Technology Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">13</td><td>廣東天福連鎖商業集團有限公司 (Guangdong Tianfu Chain Business Group Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">14</td><td>廣東期選信息技術有限公司 (Guangdong Qixuan Information Technology Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">15</td><td>廣州本田汽車集團 (Guangzhou Honda Automobile Group Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">16</td><td>廣州易初蓮花連鎖超市有限公司 (Guangzhou Lotus Supermarket Chain Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">17</td><td>中央紅商城 (Zhongyanghong Mall)</td></tr>
+                                    <tr><td class="number-col">18</td><td>中石化易捷銷售有限公司北京分公司 (Sinopec Easy Joy Sales Co., Ltd. - Beijing Branch)</td></tr>
+                                    <tr><td class="number-col">19</td><td>中國石化銷售股份有限公司廣西石油分公司 (Sinopec Sales Co., Ltd. - Guangxi Petroleum Branch)</td></tr>
+                                    <tr><td class="number-col">20</td><td>中國石化銷售股份有限公司遼寧石油分公司 (Sinopec Sales Co., Ltd. - Liaoning Petroleum Branch)</td></tr>
+                                    <tr><td class="number-col">21</td><td>中牧集團 (China Animal Agriculture Group Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">22</td><td>中國人民銀行 (People's Bank of China, PBOC)</td></tr>
+                                    <tr><td class="number-col">23</td><td>中集集團 (China International Marine Containers (Group) Co., Ltd., CIMC)</td></tr>
+                                    <tr><td class="number-col">24</td><td>天津期選信息技術有限公司 (Tianjin Qixuan Information Technology Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">25</td><td>太極電腦股份有限公司 (Taiji Computer Corporation Limited)</td></tr>
+                                    <tr><td class="number-col">26</td><td>巴羅克（上海）服飾有限公司 (Baroque (Shanghai) Apparel Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">27</td><td>方藍石家莊教育科技有限公司 (Fang Lanshi Shijiazhuang Education Technology Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">28</td><td>無錫國美電器有限公司 (Gome Electrical Appliances Co., Ltd. - Wuxi)</td></tr>
+                                    <tr><td class="number-col">29</td><td>北京市大中家用電器連鎖銷售有限公司 (Beijing Dazhong Electrical Appliances Chain Sales Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">30</td><td>北京國美管家信息技術有限公司 (Beijing Gome Housekeeper Information Technology Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">31</td><td>北京神州數碼（中國）有限公司 (Digital China (China) Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">32</td><td>北京期選信息技術有限公司 (Beijing Qixuan Information Technology Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">33</td><td>北京華電公司 (Beijing Huadian Company)</td></tr>
+                                    <tr><td class="number-col">34</td><td>北京超市發連鎖股份有限公司 (Beijing Chaoshifa Chain Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">35</td><td>四川步步高商業有限責任公司 (Sichuan Bubugao Commercial Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">36</td><td>四川蘇寧易購銷售有限公司 (Sichuan Suning.com Sales Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">37</td><td>四川電信有限公司 (Sichuan Telecom Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">38</td><td>寧波浙國美電器有限公司 (Ningbo Zhejiang Gome Electrical Appliances Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">39</td><td>華潤萬家有限公司 (China Resources Vanguard Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">40</td><td>安徽生鮮傳奇商業有限公司 (Anhui Fresh Legend Business Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">41</td><td>安徽百大合家福連鎖超市股份有限公司 (Anhui Baida Hejiafu Chain Supermarket Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">42</td><td>安徽壹度品牌運營股份有限公司 (Anhui Yidu Brand Operation Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">43</td><td>成都鄰你生活股份有限公司 (Chengdu Linni Life Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">44</td><td>江西步步高商業連鎖有限責任公司 (Jiangxi Bubugao Commercial Chain Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">45</td><td>江西煌上煌集團食品股份有限公司 (Jiangxi Huangshanghuang Group Food Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">46</td><td>江蘇振為企業管理咨詢有限公司 (Jiangsu Zhenwei Enterprise Management Consulting Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">47</td><td>江蘇期選信息技術有限公司 (Jiangsu Qixuan Information Technology Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">48</td><td>江蘇華地百貨及大統華超市 (Jiangsu Huadi Department Store & Datonghua Supermarket)</td></tr>
+                                    <tr><td class="number-col">49</td><td>西安市國美電器有限公司 (Gome Electrical Appliances Co., Ltd. - Xi'an)</td></tr>
+                                    <tr><td class="number-col">50</td><td>步步高商業連鎖股份有限公司 (Bubugao Commercial Chain Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">51</td><td>沈陽國美電器有限公司 (Gome Electrical Appliances Co., Ltd. - Shenyang)</td></tr>
+                                    <tr><td class="number-col">52</td><td>國美電器內蒙古有限公司興安路商城 (Gome Electrical Appliances Inner Mongolia Co., Ltd. - Xing'an Road Mall)</td></tr>
+                                    <tr><td class="number-col">53</td><td>國美電器有限公司 (Gome Electrical Appliances Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">54</td><td>杭州簡培科技有限公司 (Hangzhou Jianpei Technology Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">55</td><td>武漢武商超市管理有限公司 (Wuhan Wushang Supermarket Management Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">56</td><td>河南省國美電器有限公司 (Henan Provincial Gome Electrical Appliances Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">57</td><td>河南移動公司 (Henan Mobile Communications Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">58</td><td>青島友客便利連鎖管理有限公司 (Qingdao Youke Convenience Chain Management Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">59</td><td>青島國美電器有限公司 (Gome Electrical Appliances Co., Ltd. - Qingdao)</td></tr>
+                                    <tr><td class="number-col">60</td><td>信得藥業公司 (Sinder Pharmaceutical Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">61</td><td>哈爾濱百年前錦公司 (Harbin Bainian Qianjin Company)</td></tr>
+                                    <tr><td class="number-col">62</td><td>星創視界（中國）集團有限公司 (Star Vision (China) Group Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">63</td><td>絕味食品股份有限公司 (Juewei Food Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">64</td><td>重慶市國美電器有限公司 (Chongqing Gome Electrical Appliances Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">65</td><td>重慶永輝超市有限公司 (Chongqing Yonghui Supermarket Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">66</td><td>陝西期選信息技術有限公司 (Shaanxi Qixuan Information Technology Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">67</td><td>徐州市國美家用電器有限公司 (Xuzhou Gome Electrical Appliances Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">68</td><td>徐州國美供應鏈管理有限公司 (Xuzhou Gome Supply Chain Management Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">69</td><td>泰達濱海(高鐵管理) (Teda Binhai (High-Speed Rail Management))</td></tr>
+                                    <tr><td class="number-col">70</td><td>浙江國美電器有限公司 (Zhejiang Gome Electrical Appliances Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">71</td><td>國家電網公司 (State Grid Corporation of China, SGCC)</td></tr>
+                                    <tr><td class="number-col">72</td><td>湖北黃商集團股份有限公司 (Hubei Huangshang Group Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">73</td><td>湖南友阿便利超市管理有限公司 (Hunan Youa Convenience Supermarket Management Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">74</td><td>湖南友誼阿波羅商業股份有限公司 (Hunan Youyi Apollo Commercial Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">75</td><td>陽光雨露信息技術服務（北京） (Sunny Rain Information Technology Service (Beijing))</td></tr>
+                                    <tr><td class="number-col">76</td><td>新世界百貨集團 (New World Department Store Group)</td></tr>
+                                    <tr><td class="number-col">77</td><td>新疆麥隆人才發展有限公司 (Xinjiang Mailong Talent Development Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">78</td><td>福州國美電器有限公司 (Gome Electrical Appliances Co., Ltd. - Fuzhou)</td></tr>
+                                    <tr><td class="number-col">79</td><td>蒙牛公司 (Mengniu Dairy Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">80</td><td>廣西柳州百貨商場 (Guangxi Liuzhou Department Store)</td></tr>
+                                    <tr><td class="number-col">81</td><td>濟南創盟 (Jinan Chuangmeng Alliance)</td></tr>
+                                    <tr><td class="number-col">82</td><td>沈陽重工業集團 (Shenyang Heavy Industry Group Co., Ltd.)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 台灣地區企業 -->
+                    <div class="region-section">
+                        <div class="region-title taiwan-title">台灣地區企業 (Taiwan Region Enterprises)</div>
+                        <div class="table-scroll">
+                            <table class="client-table">
+                                <thead>
+                                    <tr>
+                                        <th class="number-col">#</th>
+                                        <th>企業名稱 (Enterprise Name)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="number-col">1</td><td>工研院 (Industrial Technology Research Institute, ITRI)</td></tr>
+                                    <tr><td class="number-col">2</td><td>中國石油 (CPC Corporation, Taiwan)</td></tr>
+                                    <tr><td class="number-col">3</td><td>中華航空 (China Airlines)</td></tr>
+                                    <tr><td class="number-col">4</td><td>中華電信 (Chunghwa Telecom Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">5</td><td>仁寶電腦 (Compal Electronics, Inc.)</td></tr>
+                                    <tr><td class="number-col">6</td><td>日正食品 (Rizheng Food Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">7</td><td>台達電 (Delta Electronics, Inc.)</td></tr>
+                                    <tr><td class="number-col">8</td><td>台灣微軟 (Microsoft Taiwan Corporation)</td></tr>
+                                    <tr><td class="number-col">9</td><td>台灣電力 (Taiwan Power Company, Taipower)</td></tr>
+                                    <tr><td class="number-col">10</td><td>台灣歐姆龍 (Omron Taiwan Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">11</td><td>台灣機械業工會 (Taiwan Machinery Industry Association)</td></tr>
+                                    <tr><td class="number-col">12</td><td>外貿協會 (Taiwan External Trade Development Council, TAITRA)</td></tr>
+                                    <tr><td class="number-col">13</td><td>光寶集團 (Lite-On Group)</td></tr>
+                                    <tr><td class="number-col">14</td><td>全家便利商店 (FamilyMart Co., Ltd. - Taiwan)</td></tr>
+                                    <tr><td class="number-col">15</td><td>合勤科技 (ZyXEL Communications Corporation)</td></tr>
+                                    <tr><td class="number-col">16</td><td>和泰興業 (Hotai Motor Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">17</td><td>奇美電子 (Chi Mei Optoelectronics Corporation, now Innolux Corporation)</td></tr>
+                                    <tr><td class="number-col">18</td><td>屈臣氏 (Watsons Taiwan)</td></tr>
+                                    <tr><td class="number-col">19</td><td>金仁寶集團 (Compal Group)</td></tr>
+                                    <tr><td class="number-col">20</td><td>長興材料工業 (Everlight Chemical Industrial Corporation)</td></tr>
+                                    <tr><td class="number-col">21</td><td>阿瘦皮鞋 (A.S. O.S. Shoes Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">22</td><td>思達科技 (Startek Inc.)</td></tr>
+                                    <tr><td class="number-col">23</td><td>統一超商 (President Chain Store Corporation, 7-Eleven Taiwan)</td></tr>
+                                    <tr><td class="number-col">24</td><td>愛萬德測試 (Avande Testing Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">25</td><td>萬久平 (Wan Jiuping Enterprise)</td></tr>
+                                    <tr><td class="number-col">26</td><td>裕利物流 (Yulon Logistics Corporation)</td></tr>
+                                    <tr><td class="number-col">27</td><td>農業科技研究院 (Agricultural Technology Research Institute)</td></tr>
+                                    <tr><td class="number-col">28</td><td>達欣工程 (Tatung Construction Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">29</td><td>鼎眾公司 (Dingzhong Company)</td></tr>
+                                    <tr><td class="number-col">30</td><td>臺北市職能發展學院 (Taipei City College of Technology)</td></tr>
+                                    <tr><td class="number-col">31</td><td>遠傳電信 (Far EasTone Telecommunications Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">32</td><td>慧國工業 (Winbond Electronics Corporation)</td></tr>
+                                    <tr><td class="number-col">33</td><td>緯創資通 (Wistron Corporation)</td></tr>
+                                    <tr><td class="number-col">34</td><td>錦盛針織 (Jinsheng Knitting Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">35</td><td>聯華食品 (Uni-President Foods Corporation)</td></tr>
+                                    <tr><td class="number-col">36</td><td>鴻海精密 (Hon Hai Precision Industry Co., Ltd., Foxconn)</td></tr>
+                                    <tr><td class="number-col">37</td><td>寶雅國際 (Poya International Co., Ltd.)</td></tr>
+                                    <tr><td class="number-col">38</td><td>建興存儲 (Lite-On Storage, Inc.)</td></tr>
+                                    <tr><td class="number-col">39</td><td>東洋生技 (Oriental Biotech Corporation)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 初始化标签切换
+        const tabs = new bootstrap.Tab('#academic-tab');
+        tabs.show();
+
+        // 优化滚动体验
+        document.querySelectorAll('.table-scroll').forEach(scrollContainer => {
+            scrollContainer.addEventListener('scroll', (e) => {
+                const table = e.target.querySelector('.client-table');
+                if (table) {
+                    const th = table.querySelector('th');
+                    th.style.boxShadow = e.target.scrollTop > 10 ? '0 2px 4px rgba(0,0,0,0.1)' : 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
