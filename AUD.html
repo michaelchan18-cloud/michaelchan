@@ -80,12 +80,13 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th width="8%">項目序號</th>
-                    <th width="8%">本金</th>
-                    <th width="10%">匯率類型</th>
-                    <th width="8%">匯率</th>
-                    <th width="18%">轉換後金額（AUD）</th>
-                    <th width="48%">後續處理/期限</th>
+                    <th width="7%">項目序號</th>
+                    <th width="7%">本金</th>
+                    <th width="9%">匯率類型</th>
+                    <th width="7%">匯率</th>
+                    <th width="7%">利率</th> <!-- 新增利率列 -->
+                    <th width="17%">轉換後金額（AUD）</th>
+                    <th width="46%">後續處理/期限</th>
                 </tr>
             </thead>
             <tbody>
@@ -93,7 +94,8 @@
                     <td>頂部備註</td>
                     <td>-</td>
                     <td>-</td>
-                    <td>2.8%</td>
+                    <td>-</td> <!-- 匯率列恢復為- -->
+                    <td>2.8%</td> <!-- 2.8%遷移至利率列 -->
                     <td class="highlight">158179.64 (99261.8+ 39147.34+19573.2)</td>
                     <td><span class="red-term">1個月定期</span> (到期日 - 5/1/2026)</td>
                 </tr>
@@ -102,6 +104,7 @@
                     <td>50萬</td>
                     <td>直匯</td>
                     <td>5.07</td>
+                    <td>-</td> <!-- 無利率填- -->
                     <td class="highlight">99261.8</td>
                     <td><span class="red-term">1個月定期</span> (到期日 - 5/1/2026)</td>
                 </tr>
@@ -110,6 +113,7 @@
                     <td>50萬</td>
                     <td>掛（即期）</td>
                     <td>5.13</td>
+                    <td>-</td> <!-- 無利率填- -->
                     <td>97868.53</td>
                     <td>1. 39147.34 AUD: <span class="red-term">1個月定期</span> (到期日 - 5/1/2026)<br>2. 39147.34 AUD: 3個月定期 (到期日 - 3/2/2026)<br>3. 19573.2 AUD：沒有接 -  <span class="red-term">1個月定期</span> (到期日 - 5/1/2026)</td>
                 </tr>
@@ -118,6 +122,7 @@
                     <td>50萬</td>
                     <td>掛（即期）</td>
                     <td>5.08</td>
+                    <td>-</td> <!-- 無利率填- -->
                     <td>98812.24</td>
                     <td>待處理 (到期日 - 20/12/2025)</td>
                 </tr>
@@ -126,6 +131,7 @@
                     <td>HKD 10900</td>
                     <td>掛（即期）</td>
                     <td>5.1022</td>
+                    <td>-</td> <!-- 無利率填- -->
                     <td>21451.13</td>
                     <td>轉NZD（匯率1.1374）→ NZD 24482.63</td>
                 </tr>
