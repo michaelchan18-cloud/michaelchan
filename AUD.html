@@ -80,13 +80,14 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th width="7%">項目序號</th>
-                    <th width="7%">本金</th>
-                    <th width="9%">匯率類型</th>
-                    <th width="7%">匯率</th>
-                    <th width="7%">利率</th>
-                    <th width="17%">轉換後金額（AUD）</th>
-                    <th width="46%">後續處理/期限</th>
+                    <th width="6%">項目序號</th>
+                    <th width="6%">本金</th>
+                    <th width="8%">匯率類型</th>
+                    <th width="6%">匯率</th>
+                    <th width="6%">利率</th>
+                    <th width="16%">轉換後金額（AUD）</th>
+                    <th width="8%">到期日</th> <!-- 新增到期日列 -->
+                    <th width="44%">後續處理/期限</th>
                 </tr>
             </thead>
             <tbody>
@@ -97,7 +98,8 @@
                     <td>-</td>
                     <td>2.8%</td>
                     <td class="highlight">158179.64 (99261.8+ 39147.34+19573.2)</td>
-                    <td><span class="red-term">1個月定期</span> (到期日 - 5/1/2026)</td>
+                    <td>5/1/2026</td> <!-- 迁移到期日 -->
+                    <td><span class="red-term">1個月定期</span></td> <!-- 清理原列到期日 -->
                 </tr>
                 <tr>
                     <td>①</td>
@@ -106,7 +108,8 @@
                     <td>5.07</td>
                     <td>-</td>
                     <td class="highlight">99261.8</td>
-                    <td><span class="red-term">1個月定期</span> (到期日 - 5/1/2026)</td>
+                    <td>5/1/2026</td> <!-- 迁移到期日 -->
+                    <td><span class="red-term">1個月定期</span></td> <!-- 清理原列到期日 -->
                 </tr>
                 <tr>
                     <td>②</td>
@@ -115,7 +118,8 @@
                     <td>5.13</td>
                     <td>-</td>
                     <td>97868.53</td>
-                    <td>1. 39147.34 AUD: <span class="red-term">1個月定期</span> (到期日 - 5/1/2026)<br>2. 39147.34 AUD: 3個月定期 (到期日 - 3/2/2026)<br>3. 19573.2 AUD：沒有接 -  <span class="red-term">1個月定期</span> (到期日 - 5/1/2026)</td>
+                    <td>5/1/2026、3/2/2026</td> <!-- 合并多个到期日 -->
+                    <td>1. 39147.34 AUD: <span class="red-term">1個月定期</span><br>2. 39147.34 AUD: 3個月定期<br>3. 19573.2 AUD：沒有接 -  <span class="red-term">1個月定期</span></td> <!-- 清理原列到期日 -->
                 </tr>
                 <tr>
                     <td>③</td>
@@ -124,7 +128,8 @@
                     <td>5.08</td>
                     <td>-</td>
                     <td>98812.24</td>
-                    <td>待處理 (到期日 - 20/12/2025)</td>
+                    <td>20/12/2025</td> <!-- 迁移到期日 -->
+                    <td>待處理</td> <!-- 清理原列到期日 -->
                 </tr>
                 <tr>
                     <td>④</td>
@@ -133,7 +138,8 @@
                     <td>5.1022</td>
                     <td>-</td>
                     <td>21451.13</td>
-                    <td>倒掛NZD 24482.63 →（匯率1.1374）to AUD (到期日 - 5/1/2026)</td>
+                    <td>5/1/2026</td> <!-- 迁移到期日 -->
+                    <td>倒掛NZD 24482.63 →（匯率1.1374）to AUD</td> <!-- 清理原列到期日 -->
                 </tr>
             </tbody>
         </table>
